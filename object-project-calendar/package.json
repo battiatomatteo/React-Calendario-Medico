@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "npx ts-node -P tsconfig.server.json server/index.ts"
   },
   "dependencies": {
     "react": "^18.2.0",
