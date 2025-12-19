@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import notificationRoutes from './routers/Notification'; 
-//  TypeScript capisce che il sorgente è .ts, ma nel compilato ESM diventa .js, quindi Node lo trova.
 
 dotenv.config();
 
@@ -19,5 +18,5 @@ app.use('/notifica', notificationRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`✅ Server notifiche avviato su porta ${PORT}`);
+  console.log(`Server notifiche avviato sulla porta ${PORT}`);
 });
