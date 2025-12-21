@@ -1,8 +1,8 @@
-# Calendario-Nuova-Versione
+# Calendario React
 
 ## 📁 Struttura e funzionamento della cartella `src/`
 
-La cartella `src/` contiene il frontend dell'applicazione , sviluppata in **TypeScript**
+La cartella `src/` contiene il frontend dell'applicazione , sviluppata in **TypeScript** .
 L’architettura è modulare e separa chiaramente responsabilità e livelli logici, rendendo il codice più leggibile, manutenibile e facile da estendere.
 
 ```
