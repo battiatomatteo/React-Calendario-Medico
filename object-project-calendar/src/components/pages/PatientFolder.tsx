@@ -7,10 +7,20 @@ type Props = {
 };
 
 const PatientFolder: React.FC<Props> = ({ patientName }) => {
-  const { patientData, medicineList, somministrazioni, allFarmaci, loading, error, saveTherapyOldStyle} =
-    usePatientFolderLogic(patientName);
+  const { 
+    patientData, 
+    medicineList, 
+    somministrazioni, 
+    allFarmaci, 
+    loading, 
+    error, 
+    saveTherapyOldStyle,
+    refresh
+  } = usePatientFolderLogic(patientName);
+
 
   const [therapyMode, setTherapyMode] = useState(false);
+
 
   // 👇 stato unico per nuove terapie
   const [newTherapies, setNewTherapies] = useState<
@@ -182,15 +192,19 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
                 try {
                   await saveTherapyOldStyle({
                     selectedValue: last.nome_medicina,
-                    dos: last.dosaggio_medicina,     // il tuo "dos"
-                    giornof: last.data_fine.split("-")[0], // se lo hai in dd-MM-yyyy
+                    dos: last.dosaggio_medicina,
+                    giornof: last.data_fine.split("-")[0],
                     mesef:   last.data_fine.split("-")[1],
                     annof:   last.data_fine.split("-")[2],
                   });
 
+                  // aggiorna automaticamente la cartella
+                  refresh();
+
                   setTherapyMode(false);
                   setNewTherapies([]);
                   alert("Terapia salvata correttamente.");
+
                 } catch {
                   alert("Errore nel salvataggio della terapia.");
                 }

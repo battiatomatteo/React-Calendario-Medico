@@ -68,6 +68,12 @@ export const usePatientFolderLogic = (patientName: string, giorno?: string) => {
   const [loading, setLoading] = useState<boolean>(true);              // Stato di caricamento
   const [error, setError] = useState<string | null>(null);           // Stato di errore
 
+  // Trigger per forzare il refresh automatico 
+  const [refreshTrigger, setRefreshTrigger] = useState(0); 
+  // Funzione pubblica per forzare il refresh 
+  const refresh = () => setRefreshTrigger(prev => prev + 1);
+
+
   // Funzione per salvare una nuova terapia
   const saveTherapyOldStyle = async (params: {
     selectedValue: string;       // ID del farmaco scelto (Farmaci/{id})
@@ -147,11 +153,13 @@ export const usePatientFolderLogic = (patientName: string, giorno?: string) => {
           `${index}`             // ID somministrazione = indice
         );
 
+        const oreFormattate = `${String(dataCorrente.getHours()).padStart(2, "0")}:00`;
+        
         // Salvataggio somministrazione
-        await setDoc(sommRef, {
-          stato: false,
-          data_somministrazione: dataSomministrazione,
-          ore: dataCorrente.getHours(),
+        await setDoc(sommRef, { 
+          stato: false, 
+          data_somministrazione: dataSomministrazione, 
+          ore: oreFormattate, 
         });
       }
 
@@ -181,24 +189,22 @@ export const usePatientFolderLogic = (patientName: string, giorno?: string) => {
   };
 
   // Caricamento lista completa farmaci all'inizializzazione del componente
-  useEffect(() => {
-    const fetchFarmaci = async () => {
-      try {
-        const farmaciCollection = collection(db, "Farmaci");
-        const snapshot = await getDocs(farmaciCollection);
-        const lista = snapshot.docs.map((doc) => ({
-          id: doc.id,
+  useEffect(() => { 
+    const fetchFarmaci = async () => { 
+      try { 
+        const farmaciCollection = collection(db, "Farmaci"); 
+        const snapshot = await getDocs(farmaciCollection); 
+        const lista = snapshot.docs.map((doc) => ({ 
+          id: doc.id, 
           ...doc.data(),
-        }));
-        console.log("Lista completa farmaci:", lista);
-        setAllFarmaci(lista);
-      } catch (err) {
-        console.error("Errore nel caricamento farmaci:", err);
-      }
-    };
-
-    fetchFarmaci();
-  }, []);
+        })); 
+        setAllFarmaci(lista); 
+      } 
+      catch (err) { 
+          console.error("Errore nel caricamento farmaci:", err); 
+        } 
+      }; fetchFarmaci(); 
+    }, []);
 
   // Caricamento cartella paziente quando cambia patientName o giorno
   useEffect(() => {
@@ -318,7 +324,7 @@ export const usePatientFolderLogic = (patientName: string, giorno?: string) => {
       setLoading(false);
       setError("Nome paziente non valido.");
     }
-  }, [patientName, giorno]);
+  }, [patientName, giorno, refreshTrigger]);
 
   // Ritorno i dati e le funzioni utili
   return {
@@ -329,6 +335,7 @@ export const usePatientFolderLogic = (patientName: string, giorno?: string) => {
     loading,
     error,
     saveTherapyOldStyle,
+    refresh
   };
 };
 
