@@ -141,13 +141,15 @@ Sul proprio terminale una volta che il server è stato avviato si potranno visio
 ```
 
 Richiesta ricevuta: {
-  oneSignalId: '80e973dc-23b6-4df3-a86a-ca43586bbb5e',
-  subscriptionId: '275026da-dfab-4876-86a4-080ebf712824',
+  oneSignalId: 'YOUR_ONESIGNAL_ID',
+  subscriptionId: 'YOUR_SUBSCRIPTION_ID',
   titolo: 'Promemoria Giornaliero - Medico',
   messaggio: 'Benvenuto Dr.ReplitMedico! Tutto sotto controllo oggi!',
   data: { type: 'doctor_welcome', appointmentsCount: 0, missedMedsCount: 0 }
 }
 
 ```
+
+I dati di ogni utente , in questo caso **oneSignalId** e **subscriptionId** vengono presi al primo accesso , dando il consenso alle notifiche .
 
 All'interno del file **.env** sono state inserite le varibili di ambiente , come ad esempio le key di **oneSignal** .
