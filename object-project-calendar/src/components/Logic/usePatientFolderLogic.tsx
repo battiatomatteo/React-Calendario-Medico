@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../../lib/Firebase";
 import { doc, getDoc, collection, getDocs, setDoc } from "firebase/firestore";
+import { deleteDoc } from "firebase/firestore";
 
 // Tipi di dati
 // Definizione delle interfacce per i dati del paziente, medicine e somministrazioni
@@ -326,6 +327,20 @@ export const usePatientFolderLogic = (patientName: string, giorno?: string) => {
     }
   }, [patientName, giorno, refreshTrigger]);
 
+  const deleteTherapy = async (therapyId: string) => { 
+    try { // elimina il documento principale della terapia 
+      await deleteDoc(doc(db, "Pazienti", patientName, "Medicine_paziente", therapyId)); 
+      // 🔥 aggiorna la UI 
+      refresh(); 
+      
+      return { ok: true }; 
+    } 
+    catch (err) { 
+      console.error("Errore eliminazione terapia:", err); 
+      throw err; 
+    } 
+  };
+
   // Ritorno i dati e le funzioni utili
   return {
     patientData,
@@ -335,6 +350,7 @@ export const usePatientFolderLogic = (patientName: string, giorno?: string) => {
     loading,
     error,
     saveTherapyOldStyle,
+    deleteTherapy,
     refresh
   };
 };

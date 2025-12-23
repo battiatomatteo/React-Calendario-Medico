@@ -82,3 +82,15 @@
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
 }
 
+.delete-button {
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background: #d93636;
+}

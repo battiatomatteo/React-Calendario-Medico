@@ -15,6 +15,7 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
     loading, 
     error, 
     saveTherapyOldStyle,
+    deleteTherapy,
     refresh
   } = usePatientFolderLogic(patientName);
 
@@ -91,6 +92,7 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
                 <th>Note</th>
                 <th>Tipo</th>
                 <th>Date terapia</th>
+                <th>Elimina</th>
               </tr>
             </thead>
             <tbody>
@@ -102,8 +104,28 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
                   <td>{med.note_medicina || "-"}</td>
                   <td>{med.tipo_medicina || "-"}</td>
                   <td>{med.dataAggiunta + " fino a " + med.data_fine || "-"}</td>
+
+                  {/* BOTTONE ELIMINA */}
+                  <td>
+                    <button
+                      className="delete-button"
+                      onClick={async () => {
+                        if (window.confirm("Sei sicuro di voler eliminare questa terapia?")) {
+                          try {
+                            await deleteTherapy(med.id);
+                            alert("Terapia eliminata.");
+                          } catch {
+                            alert("Errore durante l'eliminazione.");
+                          }
+                        }
+                      }}
+                    >
+                      🗑️
+                    </button>
+                  </td>
                 </tr>
               ))}
+
 
               {/* 🔹 nuove terapie da aggiungere */}
               {therapyMode && newTherapies.map((t, idx) => (
