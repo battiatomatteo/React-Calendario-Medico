@@ -150,6 +150,6 @@ Richiesta ricevuta: {
 
 ```
 
-I dati di ogni utente , in questo caso **oneSignalId** e **subscriptionId** vengono presi al primo accesso , dando il consenso alle notifiche .
+I dati di ogni utente , in questo caso **oneSignalId** e **subscriptionId**, vengono presi al primo accesso , dando il consenso alle notifiche .
 
 All'interno del file **.env** sono state inserite le varibili di ambiente , come ad esempio le key di **oneSignal** .
