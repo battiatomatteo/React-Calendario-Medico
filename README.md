@@ -136,4 +136,18 @@ npm run server  # comando per il server
 
 ```
 
+Sul proprio terminale una volta che il server è stato avviato si potranno visionare le notifiche che vengono inviate da **oneSignal** , eccone un esempio :
+
+```
+
+Richiesta ricevuta: {
+  oneSignalId: '80e973dc-23b6-4df3-a86a-ca43586bbb5e',
+  subscriptionId: '275026da-dfab-4876-86a4-080ebf712824',
+  titolo: 'Promemoria Giornaliero - Medico',
+  messaggio: 'Benvenuto Dr.ReplitMedico! Tutto sotto controllo oggi!',
+  data: { type: 'doctor_welcome', appointmentsCount: 0, missedMedsCount: 0 }
+}
+
+```
+
 All'interno del file **.env** sono state inserite le varibili di ambiente , come ad esempio le key di **oneSignal** .
