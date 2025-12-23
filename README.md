@@ -2,7 +2,7 @@
 
 Web app sviluppata in React, con l’obiettivo di offrire un calendario medico intelligente con funzionalità personalizzate a seconda del tipo di utente: **Paziente, Medico e Admin** .
 
-Vengono utilizzati onesignal, come sistema di notifiche push per tenere informati i pazienti sugli orari dei farmaci e Firebase , per la gestione del salvataggio dei dati
+Vengono utilizzati **oneSignal**, come sistema di notifiche push per tenere informati i pazienti sugli orari dei farmaci , invece per la gestione del salvataggio dei dati viene utilizzato **Firebase** . 
 
 ---
 
