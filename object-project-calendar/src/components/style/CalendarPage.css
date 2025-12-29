@@ -8,8 +8,8 @@ body {
 
 /* Contenitore principale */
 .calendar-container {
-  padding: 20px;
-  padding-right: 30px; /* 👉 spazio extra a destra */
+  padding: 10px;
+  padding-right: 30px; /* spazio extra a destra */
 }
 
 /* Header */

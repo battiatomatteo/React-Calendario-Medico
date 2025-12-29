@@ -6,7 +6,7 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #f0f4f8, #d9e4ec);
   font-family: Arial, sans-serif;
-  padding: 40px;
+  padding: 20px;
 }
 
 /* Box interno */
@@ -16,7 +16,7 @@
   border-radius: 10px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 800px;
+  max-width: 600px;
 }
 
 /* Titolo */
@@ -96,4 +96,8 @@ form input[type="submit"]:hover {
 
 span{
   color: #444;
+}
+
+.reg{
+  color: white !important;
 }

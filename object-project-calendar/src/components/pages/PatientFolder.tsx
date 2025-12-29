@@ -22,6 +22,7 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
 
   const [therapyMode, setTherapyMode] = useState(false);
 
+  console.log("allFarmaci : ", allFarmaci);
 
   // 👇 stato unico per nuove terapie
   const [newTherapies, setNewTherapies] = useState<
@@ -141,6 +142,7 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
                         // 👇 cerca il farmaco selezionato in allFarmaci
                         const selectedFarmaco = allFarmaci.find(f => f.id === selectedId);
                         if (selectedFarmaco) {
+                          copy[idx].tempo_ogni_dosaggio = selectedFarmaco.tempo_dosaggio || "-";
                           copy[idx].note_medicina = selectedFarmaco.note || "-";
                           copy[idx].tipo_medicina = selectedFarmaco.tipo_farmaco || "-";
                         }
@@ -168,15 +170,7 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
                     />
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      value={t.tempo_ogni_dosaggio}
-                      onChange={(e) => {
-                        const copy = [...newTherapies];
-                        copy[idx].tempo_ogni_dosaggio = e.target.value;
-                        setNewTherapies(copy);
-                      }}
-                    />
+                    <input type="text" value={t.tempo_ogni_dosaggio} readOnly />
                   </td>
                   <td>
                     <input type="text" value={t.note_medicina} readOnly />

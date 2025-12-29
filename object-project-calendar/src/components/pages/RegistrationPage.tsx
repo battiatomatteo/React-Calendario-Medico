@@ -156,7 +156,8 @@ const RegistrationPage: React.FC = () => {
           </div>
 
           {regError && <div className="error-message">{regError}</div>}
-          <input type="submit" value="Registrati" />
+          <br />
+          <input type="submit" className='reg' value="Registrati" />
         </form>
       </div>
     </div>
