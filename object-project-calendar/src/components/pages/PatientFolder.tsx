@@ -180,7 +180,7 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
                   </td>
                   <td>
                     <div style={{ display: "flex", gap: "8px" }}>
-                      <input type="text" value={t.dataAggiunta} /> 
+                      <input type="text" value={t.dataAggiunta} readOnly /> 
                       <input
                         type="text"
                         placeholder="gg-mm-aaaa"
