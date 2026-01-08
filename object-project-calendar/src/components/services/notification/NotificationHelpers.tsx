@@ -18,13 +18,16 @@ export class NotificationHelpers {
     return patientSnap.exists() ? patientSnap.data() : null; // Restituisce i dati se esistono, altrimenti null
   }
 
-  static getTodayString(): string { // Restituisce la data odierna in formato "giorno-mese-anno"
+  static getTodayString(): string {
     const today = new Date();
-    const day = today.getDate();
-    const month = today.getMonth() + 1;
+
+    const day = String(today.getDate()).padStart(2, "0");      // 1 -> "01"
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // 3 -> "03"
     const year = today.getFullYear();
+
     return `${day}-${month}-${year}`;
   }
+
 
   static async getAppointmentsCount(username: string, date: string): Promise<number> { // Conta gli appuntamenti per un utente in una data specifica
     try {

@@ -57,6 +57,8 @@ export class NotificationService {
       const today = NotificationHelpers.getTodayString(); // Data odierna in formato stringa
       const todayMedicines = await NotificationHelpers.getTodayMedicinesCount(username, today); // Conta le medicine da prendere oggi
 
+      console.log(`Preparazione messaggio per paziente ${username}: ${todayMedicines} medicine da prendere oggi ${today}.`);
+
       let message = `Benvenuto ${username}! `; // Spazio intenzionale
       if (todayMedicines > 0) { // Controlla se ci sono medicine da prendere oggi
         message += `Hai ${todayMedicines} medicina/e da prendere oggi.`; 

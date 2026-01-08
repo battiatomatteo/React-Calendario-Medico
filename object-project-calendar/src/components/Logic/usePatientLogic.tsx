@@ -226,7 +226,7 @@ const PatientMessageWindow: React.FC<Props> = ({ giorno, patientName }) => {
   // Renderizza la finestra delle somministrazioni del paziente
   return (
     <div>
-      <h3>Somministrazioni del giorno: {giorno}</h3>
+      <h3>Somministrazioni del giorno: {normalizeDate(giorno)} :</h3>
       
       {giornoListaSomministrazioni.length > 0 ? (
           <div className="somministrazioni-grid">
