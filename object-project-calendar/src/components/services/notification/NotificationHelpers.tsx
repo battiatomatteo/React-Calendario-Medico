@@ -13,10 +13,71 @@ export class NotificationHelpers {
   }
 
   static async getPatientData(username: string) { // Recupera i dati di un paziente dal Firestore
-    const patientRef = doc(db, 'Pazienti', username); // Riferimento al documento del paziente
+    const patientRef = doc(db, 'Pazienti', username, 'Medicine_paziente'); // Riferimento al documento del paziente
+    console.log(`Recupero dati paziente per ${username}, riferimento:`, patientRef);
     const patientSnap = await getDoc(patientRef); // Recupera il documento
     return patientSnap.exists() ? patientSnap.data() : null; // Restituisce i dati se esistono, altrimenti null
   }
+
+  static async getTodayPendingSomministrazioni(
+    username: string,
+    today: string
+  ): Promise<{ stato: boolean; ore: string; medicineName: string }[]> {
+    try {
+      const result: { stato: boolean; ore: string; medicineName: string }[] = [];
+
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      const medicineRef = collection(db, 'Pazienti', username, 'Medicine_paziente');
+      const medicineSnap = await getDocs(medicineRef);
+
+      for (const medicineDoc of medicineSnap.docs) {
+        const medicineName = medicineDoc.id;
+
+        const somministrazioniRef = collection(
+          db,
+          'Pazienti',
+          username,
+          'Medicine_paziente',
+          medicineName,
+          'somministrazioni'
+        );
+
+        const somministrazioniSnap = await getDocs(somministrazioniRef);
+
+        somministrazioniSnap.forEach((sommDoc) => {
+          const sommData = sommDoc.data();
+
+          // 1️⃣ Deve essere prevista per oggi
+          if (sommData.data_somministrazione !== today) return;
+
+          // 2️⃣ Stato deve essere false
+          if (sommData.stato !== false) return;
+
+          // 3️⃣ L'ora non deve superare quella attuale
+          const [h, m] = sommData.ore.split(":").map(Number);
+          const sommMinutes = h * 60 + m;
+
+          if (sommMinutes <= currentMinutes) {
+            result.push({
+              stato: sommData.stato,
+              ore: sommData.ore,
+              medicineName
+            });
+          }
+        });
+      }
+
+      return result;
+
+    } catch (error) {
+      console.error("Errore getTodayPendingSomministrazioni:", error);
+      return [];
+    }
+  }
+
+
 
   static getTodayString(): string {
     const today = new Date();

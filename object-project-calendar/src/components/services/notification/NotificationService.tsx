@@ -80,41 +80,43 @@ export class NotificationService {
     }
   }
 
-  static async scheduleMedicineReminders(username: string): Promise<void> { // Pianifica i promemoria per le medicine di un paziente
+  static async scheduleMedicineReminders(username: string): Promise<void> {
     try {
-      const patientData = await NotificationHelpers.getPatientData(username); // Recupera i dati del paziente
-      if (!patientData) {
-        Logger.warn('Dati paziente non trovati per promemoria', username, 'NotificationService');
+      const today = NotificationHelpers.getTodayString();
+
+      // Recupera SOLO le somministrazioni di oggi, non assunte e con orario ≤ ora attuale
+      const pendingSomministrazioni = await NotificationHelpers.getTodayPendingSomministrazioni(username, today);
+
+      if (pendingSomministrazioni.length === 0) {
+        Logger.info(`Nessun promemoria da programmare per ${username} oggi`, null, 'NotificationService');
         return;
       }
 
-      const today = NotificationHelpers.getTodayString(); // Data odierna in formato stringa
-      const medicines = patientData.medicine || []; // Lista delle medicine del paziente
-      let scheduledCount = 0; // Contatore dei promemoria programmati
+      let scheduledCount = 0;
 
-      console.log(`Programmazione promemoria per ${username} per il giorno ${today}`);
+      console.log(`Somministrazioni da programmare per ${username}:`, pendingSomministrazioni);
 
-      medicines.forEach((medicine: any) => { // Itera su ogni medicina
-        if (medicine.somministrazioni) { // Controlla se ci sono somministrazioni definite
-          medicine.somministrazioni.forEach((somm: any) => { // Itera su ogni somministrazione
-            const isToday =
-              somm.data_somministrazione === today || somm.data === today; // compatibilità
-            const notTaken = 
-              somm.stato === 'Non Presa' || somm.stato === false || somm.stato === 'Da prendere'; // compatibilità
+      // Programma una notifica per ogni somministrazione valida
+      for (const somm of pendingSomministrazioni) {
+        // Qui manca il nome della medicina → lo recuperiamo
+        const medicineName = somm.medicineName  ?? "Medicina";
 
-            if (isToday && notTaken && somm.ora) { // Controlla se la somministrazione è prevista per oggi e non è stata presa
-              NotificationSender.scheduleNotificationAt(username, medicine.nome ?? medicine.id, somm.ora); // Pianifica la notifica
-              scheduledCount++; // Incrementa il contatore
-            }
-          });
-        }
-      });
+        await NotificationSender.scheduleNotificationAt(
+          username,
+          medicineName,
+          somm.ore
+        );
+
+        scheduledCount++;
+      }
 
       Logger.info(`Programmati ${scheduledCount} promemoria per ${username}`, null, 'NotificationService');
+
     } catch (error) {
       Logger.error('Errore programmazione promemoria', error, 'NotificationService');
     }
   }
+
 }
 
 export default NotificationService;
