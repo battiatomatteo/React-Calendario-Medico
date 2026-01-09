@@ -17,7 +17,6 @@ interface Paziente {
   // aggiungi altri campi se servono
 }
 
-
 export const useDoctorPanelLogic = (selectedDate: Date, doctorName: string) => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [form, setForm] = useState({ paziente: '', descrizione: '', hour: '', minute: '' });
