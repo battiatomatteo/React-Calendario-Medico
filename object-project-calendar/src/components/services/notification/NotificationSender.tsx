@@ -79,7 +79,9 @@ export class NotificationSender {
 
       // 🔥 Caso 2: orario futuro → programma SOLO per oggi
       const delay = scheduled.getTime() - now.getTime();
-      console.log(`Programmo notifica per ${medicineName} alle ${time} (tra ${delay} ms)`);
+      const minutesLeft = Math.round(delay / 60000);
+      console.log(`⏱️ Prossima notifica tra ${minutesLeft} minuti (${medicineName} alle ${time})`);
+
 
       setTimeout(async () => {
         const userData = await NotificationHelpers.getUserData(username);

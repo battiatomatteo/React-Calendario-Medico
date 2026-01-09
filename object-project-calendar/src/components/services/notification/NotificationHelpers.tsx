@@ -1,7 +1,7 @@
 import { db } from '../../../lib/Firebase';
 import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { NotificationService } from './NotificationService';
-import { NotificationSender } from './NotificationSender';
+import { logNextNotification } from '../../../../server/services/TimerLogger';
 
 
 // Classe helper per le notifiche
@@ -227,7 +227,14 @@ export class NotificationHelpers {
 
     const delayMs = (nextMinutes - currentMinutes) * 60_000;
 
-    console.log(`⏱️ Timer impostato per ${delayMs / 60000} minuti`);
+    const hours = Math.floor(nextMinutes / 60);
+    const minutes = nextMinutes % 60;
+    const time = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+
+    // Nome medicina non disponibile → metti un placeholder
+    logNextNotification(delayMs, "Medicina", time);
+
+
 
     this.pollingTimeout = setTimeout(async () => {
       console.log("🔔 Timer scattato: controllo nuove somministrazioni...");
