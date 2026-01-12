@@ -22,7 +22,7 @@ const HomePagePatient: React.FC = () => {
 
     if (!username) return;
     (async () => {
-      await NotificationService.scheduleMedicineReminders(username);
+      await NotificationService.sendWelcomeNotificationToPatient(username);
     })();
 
     NotificationHelpers.startSomministrazionePollingTimer(username);

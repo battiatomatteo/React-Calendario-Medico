@@ -59,7 +59,7 @@ export class NotificationSender {
       const scheduled = new Date();
       scheduled.setHours(hours, minutes, 0, 0);
 
-      // 🔥 Caso 1: l’orario è già passato → invia SUBITO
+      // Caso 1: l’orario è già passato → invia SUBITO
       if (scheduled <= now) {
         console.log(`Orario ${time} già passato. Invio immediato per ${medicineName}`);
 
@@ -77,11 +77,10 @@ export class NotificationSender {
         return;
       }
 
-      // 🔥 Caso 2: orario futuro → programma SOLO per oggi
+      // Caso 2: orario futuro → programma SOLO per oggi
       const delay = scheduled.getTime() - now.getTime();
       const minutesLeft = Math.round(delay / 60000);
       console.log(`⏱️ Prossima notifica tra ${minutesLeft} minuti (${medicineName} alle ${time})`);
-
 
       setTimeout(async () => {
         const userData = await NotificationHelpers.getUserData(username);
