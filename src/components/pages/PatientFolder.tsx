@@ -204,7 +204,7 @@ const PatientFolder: React.FC<Props> = ({ patientName }) => {
               onClick={async () => {
                 const last = newTherapies[newTherapies.length - 1];
 
-                // last.nome_medicina deve essere l’ID del farmaco (selectedValue “vecchio stile”)
+                // last.nome_medicina deve essere l’ID del farmaco 
                 try {
                   await saveTherapyOldStyle({
                     selectedValue: last.nome_medicina,

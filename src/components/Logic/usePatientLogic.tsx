@@ -51,7 +51,6 @@ const normalizeDate = (dateStr: string) => {
   return `${gg}-${mm}-${a}`;
 };
 
-
 const PatientMessageWindow: React.FC<Props> = ({ giorno, patientName }) => {
   const [searchParams] = useSearchParams();
   const usernamePatient = patientName ?? searchParams.get('username'); // Recupera da props o URL params 
@@ -285,7 +284,7 @@ const PatientMessageWindow: React.FC<Props> = ({ giorno, patientName }) => {
       
     </div>
   );
-};
 
+};
 
 export default PatientMessageWindow;

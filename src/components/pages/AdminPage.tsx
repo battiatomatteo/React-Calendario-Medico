@@ -79,7 +79,7 @@ const AdminPage: React.FC = () => {
   const { isValid } = useSecureRoute();
 
   if (!isValid) {
-    return <Navigate to="/" replace />; // 👈 rimanda al login
+    return <Navigate to="/" replace />; // rimanda al login
   }
 
   return (
@@ -258,44 +258,46 @@ const AdminPage: React.FC = () => {
 
       {/* --- Tabella Medicine --- */}
       <Section title="Tabella Medicine" isOpen={openSection === 3} onToggle={() => toggleSection(3)}>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nome del farmaco</th>
-              <th>Dosaggio</th>
-              <th>note</th>
-              <th>tipo_farmaco</th>
-              <th>Tempo tra ogni dosaggio</th>
-            </tr>
-          </thead>
-          <tbody>
-            {medicine.map((row) => (
-              <tr key={row.id}>
-                <td>{row.id}</td>
-                <td>{row.dosaggio}</td>
-                <td>{row.note}</td>
-                <td>{row.tipo_farmaco}</td>
-                <td>{row.tempo_dosaggio}</td>
-              </tr>
-            ))}
-            {isVisible && (
+        <div className="table-wrapper">
+          <table className="table">
+            <thead>
               <tr>
-                <td><input type="text" className="inputTableMedicine" placeholder="nome farmaco" value={id_medicina} onChange={handleNomeFarmacoChange}/></td>
-                <td><input type="number" className="inputTableMedicine" placeholder="dosaggio" value={dosaggio_medicina} onChange={handleDosaggioFarmacoChange}/></td>
-                <td><input type="text" className="inputTableMedicine" placeholder="note" value={note_medicina} onChange={handleNoteFarmacoChange}/></td>
-                <td>
-                  <select className="inputTableMedicine" value={tipo_medicina} onChange={handleTipoFarmacoChange}>
-                    <option></option>
-                    <option>Pastiglia</option>
-                    <option>Spruzzo</option>
-                    <option>Liquido</option>
-                  </select>
-                </td>
-                <td><input type="text" className="inputTableMedicine" placeholder="tempo tra ogni dosaggio" value={tempo_ongi_dosaggio} onChange={handleTempoDosChange}/></td>
+                <th>Nome del farmaco</th>
+                <th>Dosaggio</th>
+                <th>note</th>
+                <th>tipo_farmaco</th>
+                <th>Tempo tra ogni dosaggio</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {medicine.map((row) => (
+                <tr key={row.id}>
+                  <td>{row.id}</td>
+                  <td>{row.dosaggio}</td>
+                  <td>{row.note}</td>
+                  <td>{row.tipo_farmaco}</td>
+                  <td>{row.tempo_dosaggio}</td>
+                </tr>
+              ))}
+              {isVisible && (
+                <tr>
+                  <td><input type="text" className="inputTableMedicine" placeholder="nome farmaco" value={id_medicina} onChange={handleNomeFarmacoChange}/></td>
+                  <td><input type="number" className="inputTableMedicine" placeholder="dosaggio" value={dosaggio_medicina} onChange={handleDosaggioFarmacoChange}/></td>
+                  <td><input type="text" className="inputTableMedicine" placeholder="note" value={note_medicina} onChange={handleNoteFarmacoChange}/></td>
+                  <td>
+                    <select className="inputTableMedicine" value={tipo_medicina} onChange={handleTipoFarmacoChange}>
+                      <option></option>
+                      <option>Pastiglia</option>
+                      <option>Spruzzo</option>
+                      <option>Liquido</option>
+                    </select>
+                  </td>
+                  <td><input type="text" className="inputTableMedicine" placeholder="tempo tra ogni dosaggio" value={tempo_ongi_dosaggio} onChange={handleTempoDosChange}/></td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
         {isVisible ? (
           <button type="submit" name="salva" className="buttonApp" onClick={salva}>Salva</button>
         ) : (
