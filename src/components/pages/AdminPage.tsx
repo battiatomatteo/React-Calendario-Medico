@@ -62,6 +62,8 @@ const AdminPage: React.FC = () => {
     salvaUser,
     errorUser,
     setErrorUser,
+    deleteUser,
+    deleteMedicine,
   } = useAdminPageLogic();
 
 
@@ -106,6 +108,7 @@ const AdminPage: React.FC = () => {
                 <th>città</th>
                 <th>dataDiNascita</th>
                 <th>tipoUtente</th>
+                <th>Elimina</th>
               </tr>
             </thead>
             <tbody>
@@ -121,6 +124,11 @@ const AdminPage: React.FC = () => {
                   <td>{row.città}</td>
                   <td>{row.data_di_nascita}</td>
                   <td>{row.tipo_utente}</td>
+                  <td>
+                    <button className="deleteButton" onClick={() => deleteUser(row.id)}>
+                      X
+                    </button>
+                  </td>
                 </tr>
               ))}
               {isVisibleUser && (
@@ -267,6 +275,7 @@ const AdminPage: React.FC = () => {
                 <th>note</th>
                 <th>tipo_farmaco</th>
                 <th>Tempo tra ogni dosaggio</th>
+                <th>Elimina</th>
               </tr>
             </thead>
             <tbody>
@@ -277,6 +286,11 @@ const AdminPage: React.FC = () => {
                   <td>{row.note}</td>
                   <td>{row.tipo_farmaco}</td>
                   <td>{row.tempo_dosaggio}</td>
+                  <td>
+                    <button className="deleteButton" onClick={() => deleteMedicine(row.id)}>
+                      X
+                    </button>
+                  </td>
                 </tr>
               ))}
               {isVisible && (

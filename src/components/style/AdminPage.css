@@ -196,3 +196,15 @@ span {
   margin-top: 8px;
 }
 
+.deleteButton {
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.deleteButton:hover {
+  background-color: #d93636;
+}

@@ -5,6 +5,7 @@ import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import { formatDate } from "../utils/utils";
+import { deleteDoc, getDoc  } from "firebase/firestore";
 
 interface ListUtenti {
   id: string;
@@ -316,6 +317,48 @@ export const useAdminPageLogic = () => {
     }
   };
 
+  const deleteUser = async (id: string) => {
+    try {
+      // 1. Controlla se esiste un paziente con lo stesso ID
+      const pazienteRef = doc(db, "Pazienti", id);
+      const pazienteSnap = await getDoc(pazienteRef);
+
+      if (pazienteSnap.exists()) {
+        // 2. Se esiste, eliminalo
+        await deleteDoc(pazienteRef);
+        console.log(`Paziente con ID ${id} eliminato dalla raccolta Pazienti`);
+      }
+
+      // 3. Elimina l'utente dalla raccolta Utenti
+      await deleteDoc(doc(db, "Utenti", id));
+
+      // 4. Aggiorna lo stato locale
+      setUtenti((prev) => prev.filter((u) => u.id !== id));
+
+      alert("Utente eliminato con successo!");
+    } catch (error) {
+      console.error("Errore durante l'eliminazione dell'utente:", error);
+      alert("Errore durante l'eliminazione dell'utente.");
+    }
+  };
+
+
+  const deleteMedicine = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, "Farmaci", id));
+
+      // aggiorna lo stato locale
+      setListMedicin((prev) => prev.filter((m) => m.id !== id));
+
+      alert("Medicina eliminata con successo!");
+    } catch (error) {
+      console.error("Errore durante l'eliminazione della medicina:", error);
+      alert("Errore durante l'eliminazione della medicina.");
+    }
+  };
+
+
+
   const handleChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSelectedValue(event.target.value);
   };
@@ -385,6 +428,8 @@ export const useAdminPageLogic = () => {
     salvaUser,
     errorUser,
     setErrorUser,
+    deleteUser,
+    deleteMedicine,
   };
 
 
