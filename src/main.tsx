@@ -25,3 +25,9 @@ createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
   </StrictMode>
 );
+
+if ('serviceWorker' in navigator) { 
+  navigator.serviceWorker .register('/OneSignalSDKWorker.js') 
+    .then(() => console.log('SW OneSignal registrato')) 
+    .catch((err) => console.error('Errore SW:', err)) 
+}
