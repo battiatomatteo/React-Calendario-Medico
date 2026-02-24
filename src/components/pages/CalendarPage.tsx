@@ -100,7 +100,8 @@ const CalendarPage: React.FC<CalendarPageProps> = ({ onDateSelect, username, tip
 
   // 🔹 Inizializzazione OneSignal
   useEffect(() => {
-    if (!window.OneSignal || !username) return;
+    console.log("📅 CalendarPage montata, inizializzazione OneSignal per:", username);
+    if (!window.OneSignal ) return;
 
     window.OneSignalDeferred = window.OneSignalDeferred || [];
 
