@@ -8,6 +8,13 @@ import HomePagePatient from './components/pages/HomePagePatient';
 import ProtectedRoute from './components/hooks/ProtectedRoute';
 import AdminPage from './components/pages/AdminPage';
 
+import OneSignal from 'react-onesignal';
+
+OneSignal.init({
+  appId: "2982dd98-6671-4445-9316-252d4b356462",
+  allowLocalhostAsSecureOrigin: true,
+});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
@@ -25,9 +32,3 @@ createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
   </StrictMode>
 );
-
-if ('serviceWorker' in navigator) { 
-  navigator.serviceWorker .register('/OneSignalSDKWorker.js') 
-    .then(() => console.log('SW OneSignal registrato')) 
-    .catch((err) => console.error('Errore SW:', err)) 
-}
