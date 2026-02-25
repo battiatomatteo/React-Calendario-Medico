@@ -120,10 +120,12 @@ Questa struttura segue un pattern chiaro (Router → Controller → Service) che
 
 Eseguire i sucessivi comandi per l'avvio : 
 
-*Comando per entrare nella cartella del progetto :*
+*Comandi per installazione pacchetti   :*
 ```
 
-cd ./object-project-calendar/
+npm install bcryptjs
+npm install firebase
+npm install react-onesignal
 
 ```
 
