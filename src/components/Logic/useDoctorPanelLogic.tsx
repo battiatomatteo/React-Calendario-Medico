@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { formatDate } from '../utils/utils';
 import { db } from '../../lib/Firebase';
-import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection, deleteDoc } from 'firebase/firestore';
 
 export type Appointment = {
   ora: string; // formato "HH:mm"
@@ -119,11 +119,39 @@ export const useDoctorPanelLogic = (selectedDate: Date, doctorName: string) => {
     }
   };
 
+  const handleDelete = async (appointment: Appointment) => {
+    if (!doctorName) return;
+
+    const confirmDelete = window.confirm(
+      `Vuoi eliminare l'appuntamento delle ${appointment.ora} con ${appointment.paziente}?`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const docPath = `Appuntamenti/${giornoKey}/${doctorName}/${appointment.ora}`;
+
+      await deleteDoc(doc(db, docPath));
+
+      // aggiorna stato locale
+      const updatedAppointments = appointments.filter(
+        (a) => a.ora !== appointment.ora
+      );
+
+      setAppointments(updatedAppointments);
+
+      console.log("✅ Appuntamento eliminato");
+    } catch (error) {
+      console.error("Errore nell'eliminazione appuntamento:", error);
+    }
+  };
+
   return {
     form,
     setForm,
     appointments,
     handleSave,
+    handleDelete,
     giornoKey,
   };
 };
