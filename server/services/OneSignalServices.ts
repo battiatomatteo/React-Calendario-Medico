@@ -1,4 +1,3 @@
-// Funzione per inviare una notifica a OneSignal
 export async function notifyOneSignal(
   subId: string,
   titolo: string,
@@ -8,7 +7,7 @@ export async function notifyOneSignal(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Basic ${process.env.ONESIGNAL_API_KEY}` // letta da .env
+      "Authorization": `Key ${process.env.ONESIGNAL_API_KEY}`
     },
     body: JSON.stringify({
       app_id: "2982dd98-6671-4445-9316-252d4b356462",
