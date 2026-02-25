@@ -26,6 +26,7 @@ export const DoctorPanel: React.FC<{ selectedDate: Date }> = ({ selectedDate }) 
     setForm,
     appointments,
     handleSave,
+    handleDelete,
     giornoKey,
   } = useDoctorPanelLogic(selectedDate, doctorName);
 
@@ -74,6 +75,7 @@ export const DoctorPanel: React.FC<{ selectedDate: Date }> = ({ selectedDate }) 
                 <th>Nome paziente</th>
                 <th>Orario</th>
                 <th>Descrizione</th>
+                <th>Elimina</th>
               </tr>
             </thead>
             <tbody>
@@ -82,6 +84,14 @@ export const DoctorPanel: React.FC<{ selectedDate: Date }> = ({ selectedDate }) 
                   <td>{a.paziente}</td>
                   <td>{a.ora}</td>
                   <td>{a.descrizione}</td>
+                  <td>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDelete(a)}
+                    >
+                      X
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
