@@ -86,3 +86,16 @@ textarea {
 .table tr:hover {
   background-color: #e9f5ff;
 }
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
