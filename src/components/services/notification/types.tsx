@@ -2,7 +2,7 @@
 // Types per le notifiche e i pazienti
 // ———————————————————————————————————————
 export interface NotificationData {
-  oneSignalId: string;
+  oneSignalExternalId: string;
   subscriptionId?: string;
   title: string;
   message: string;
