@@ -16,13 +16,14 @@ export class NotificationSender {
 
   static async sendNotification(notificationData: NotificationData): Promise<boolean> { // Invia una notifica tramite il server esterno
     try {
-      if (!notificationData.oneSignalId || !notificationData.title || !notificationData.message) { // Controlla che i dati essenziali siano presenti
+      if (!notificationData.oneSignalExternalId || !notificationData.title || !notificationData.message) { // Controlla che i dati essenziali siano presenti
         Logger.warn('Dati notifica incompleti', notificationData, 'NotificationSender'); // Log di avviso se i dati sono incompleti
         return false;
       }
 
       const payload = { // Costruisce il payload della notifica
-        oneSignalId: notificationData.oneSignalId,
+        oneSignalExternalId: notificationData.oneSignalExternalId ,
+        //oneSignalId: notificationData.oneSignalId,
         subscriptionId: notificationData.subscriptionId,
         titolo: notificationData.title,
         messaggio: notificationData.message,
@@ -64,9 +65,9 @@ export class NotificationSender {
         console.log(`Orario ${time} già passato. Invio immediato per ${medicineName}`);
 
         const userData = await NotificationHelpers.getUserData(username);
-        if (userData?.oneSignalId) {
+        if (userData?.oneSignalExternalId) {
           await this.sendNotification({
-            oneSignalId: userData.oneSignalId,
+            oneSignalExternalId: userData.oneSignalExternalId,
             subscriptionId: userData.onesignalIdSubscription,
             title: 'Promemoria medicina',
             message: `Devi prendere ${medicineName} delle ${time}`,
@@ -84,9 +85,9 @@ export class NotificationSender {
 
       setTimeout(async () => {
         const userData = await NotificationHelpers.getUserData(username);
-        if (userData?.oneSignalId) {
+        if (userData?.oneSignalExternalId) {
           await this.sendNotification({
-            oneSignalId: userData.oneSignalId,
+            oneSignalExternalId: userData.oneSignalExternalId,
             subscriptionId: userData.onesignalIdSubscription,
             title: 'È ora di prendere la medicina!',
             message: `È ora di prendere ${medicineName} alle ${time}`,
