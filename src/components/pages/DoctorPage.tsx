@@ -13,12 +13,17 @@ const DoctorPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const usernameFromURL = searchParams.get("username");
   const usernameFromStorage = sessionStorage.getItem("username");
+  const username = searchParams.get('username');
 
   console.log("URL:", usernameFromURL, "Storage:", usernameFromStorage);
   
   // Validazione: impedisce accesso se l'URL è stato manipolato
   if (usernameFromURL !== usernameFromStorage) {
     return <p>Accesso non autorizzato: URL manipolato.</p>;
+  }
+
+  if (!username) {
+    return <p>Errore: manca il parametro "username" nella barra indirizzi.</p>;
   }
 
   const { isValid } = useSecureRoute();
@@ -35,7 +40,7 @@ const DoctorPage: React.FC = () => {
       </header>
 
       <div className="calendar-content">
-        <CalendarPage onDateSelect={setSelectedDate} username={''} tipoUtente={'medico'}/>
+        <CalendarPage onDateSelect={setSelectedDate} username={username} tipoUtente={'medico'}/>
         <DoctorPanel selectedDate={selectedDate} />
       </div>
       <div>
