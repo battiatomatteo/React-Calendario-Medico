@@ -127,6 +127,14 @@ npm install bcryptjs
 npm install firebase
 npm install react-onesignal
 
+npm install --save-dev @types/express
+npm install --save-dev @types/cors
+npm install --save-dev @types/dotenv
+
+npm install cors
+npm install dotenv
+npm install express
+
 ```
 
 *Comando per avviare il progetto :*
