@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import '../style/CalendarPage.css';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import NotificationService from '../services/notification/NotificationService';
@@ -13,62 +13,52 @@ type CalendarPageProps = {
 
 const salvaIdOneSignal = async (
   username: string,
-  externalId: string | null,
-  subscriptionId: string | null
+  externalId: string | null | undefined,
+  subscriptionId: string | null | undefined
 ) => {
-  console.log("Salvataggio ID OneSignal:", {
+  const externalIdFinal = externalId ?? "undefined";
+  const subscriptionIdFinal = subscriptionId ?? "undefined";
+
+  console.log("💾 Salvataggio OneSignal:", {
     username,
-    externalId,
-    subscriptionId
+    externalId: externalIdFinal,
+    subscriptionId: subscriptionIdFinal
   });
-  if (!username || !subscriptionId || !externalId) return false;
 
   const db = getFirestore();
   const userRef = doc(db, 'Utenti', username);
 
-  // 🔹 Leggi i dati attuali dell'utente
   const snapshot = await getDoc(userRef);
   const datiAttuali = snapshot.exists() ? snapshot.data() : {};
 
-  const idSalvato = datiAttuali?.oneSignalId;
-  const subscriptionSalvata = datiAttuali?.onesignalIdSubscription;
+  const cambiato =
+    datiAttuali?.oneSignalExternalId !== externalIdFinal ||
+    datiAttuali?.oneSignalSubscriptionId !== subscriptionIdFinal;
 
-  console.log("Dati attuali OneSignal:", {
-    idSalvato,
-    subscriptionSalvata,
-    externalId,
-    subscriptionId
-  });
-
-  // 🔹 Controllo se i campi esistono o se sono aggiornati
-  const unoMancante = !idSalvato || !subscriptionSalvata;
-  const idCambiato = idSalvato !== externalId || subscriptionSalvata !== subscriptionId;
-
-  if (!unoMancante && !idCambiato) {
-    console.log("ID OneSignal già aggiornati ✅");
-    return false; // niente da fare
+  if (!cambiato) {
+    console.log("✅ OneSignal già aggiornati");
+    return false;
   }
 
-  // 🔹 Aggiorna Firestore
   await setDoc(
     userRef,
     {
-      oneSignalId: externalId,
-      onesignalIdSubscription: subscriptionId,
+      oneSignalExternalId: externalIdFinal,
+      oneSignalSubscriptionId: subscriptionIdFinal,
       ultimoAggiornamentoPush: new Date()
     },
     { merge: true }
   );
 
-  if (unoMancante) console.log("ID OneSignal salvati per la prima volta 🆕");
-  else console.log("ID OneSignal aggiornati 🔄");
-
-  return true; // aggiornato
+  console.log("🔄 OneSignal aggiornati");
+  return true;
 };
 
 const CalendarPage: React.FC<CalendarPageProps> = ({ onDateSelect, username, tipoUtente }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [searchParams] = useSearchParams();
+  const username_ = searchParams.get('username');
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -100,64 +90,49 @@ const CalendarPage: React.FC<CalendarPageProps> = ({ onDateSelect, username, tip
 
   // 🔹 Inizializzazione OneSignal
   useEffect(() => {
-    console.log("📅 CalendarPage montata, inizializzazione OneSignal per:", username);
-    if (!window.OneSignal ) return;
+
+    if (!window.OneSignal || !username) return;
+
+    console.log("🔔 OneSignal disponibile, inizializzo...", username);
 
     window.OneSignalDeferred = window.OneSignalDeferred || [];
 
     window.OneSignalDeferred.push(async function (OneSignal: any) {
       try {
-        console.log("🔔 Inizializzazione OneSignal...");
 
-        // 🔹 1. Effettua login utente (IMPOSTA externalId)
-        await OneSignal.login(username);
-        console.log("✅ OneSignal login effettuato:", username);
+        console.log("🔔 Init OneSignal...");
 
-        // 🔹 2. Permessi notifiche
+        // 1️⃣ Permesso notifiche
         const permission = await OneSignal.Notifications.permission;
         if (permission !== "granted") {
           await OneSignal.Notifications.requestPermission();
         }
 
-        // 🔹 3. Verifica sottoscrizione
+        // 2️⃣ Aspetta che la subscription sia pronta
         const optedIn = OneSignal.User.PushSubscription.optedIn;
         if (!optedIn) {
-          console.log("❌ Utente non iscritto alle push");
+          console.log("❌ Non subscribed");
           return;
         }
 
-        // 🔹 4. Recupera subscriptionId
         const subscriptionId = OneSignal.User.PushSubscription.id;
+        console.log("✅ Subscription attiva:", subscriptionId);
 
-        // 🔹 5. ExternalId ora è lo username
-        const externalId = username;
+        // 3️⃣ ORA fai login (collega externalId al device)
+        await OneSignal.login(username);
+        console.log("✅ Login fatto:", username);
 
-        console.log("📌 ID OneSignal correnti:", {
-          externalId,
-          subscriptionId
-        });
+        const externalId = OneSignal.User.externalId;
 
-        // 🔹 6. Salva su Firestore solo se necessario
-        const aggiornato = await salvaIdOneSignal(
+        // 4️⃣ Salva su Firestore
+        await salvaIdOneSignal(
           username,
           externalId,
           subscriptionId
         );
 
-        // 🔹 7. Invia welcome solo se nuovo device / primo salvataggio
-        if (aggiornato) {
-          setTimeout(async () => {
-            if (tipoUtente === 'medico') {
-              await NotificationService.sendWelcomeNotificationToDoctor(username);
-            } else {
-              await NotificationService.sendWelcomeNotificationToPatient(username);
-              await NotificationService.scheduleMedicineReminders(username);
-            }
-          }, 2000);
-        }
-
       } catch (err) {
-        console.error("❌ Errore inizializzazione OneSignal:", err);
+        console.error("❌ Errore OneSignal:", err);
       }
     });
 
