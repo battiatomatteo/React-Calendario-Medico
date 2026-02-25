@@ -29,7 +29,7 @@ export class NotificationService {
       Logger.info('Messaggio finale medico', message, 'NotificationService');
 
       await NotificationSender.sendNotification({ // Invia la notifica
-        oneSignalId: userData.oneSignalId,
+        oneSignalExternalId: userData.oneSignalExternalId,
         subscriptionId: userData.onesignalIdSubscription,
         title: 'Promemoria Giornaliero - Medico',
         message,
@@ -69,7 +69,7 @@ export class NotificationService {
       Logger.info('Messaggio finale paziente', message, 'NotificationService');
 
       await NotificationSender.sendNotification({ // Invia la notifica  
-        oneSignalId: userData.oneSignalId,
+        oneSignalExternalId: userData.oneSignalExternalId,
         subscriptionId: userData.onesignalIdSubscription,
         title: 'Promemoria Medicine',
         message,
