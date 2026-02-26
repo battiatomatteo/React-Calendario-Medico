@@ -85,7 +85,7 @@ export class NotificationService {
       const today = NotificationHelpers.getTodayString();
 
       // Recupera SOLO le somministrazioni di oggi, non assunte e con orario ≤ ora attuale
-      const pendingSomministrazioni = await NotificationHelpers.getTodayPendingSomministrazioni(username, today);
+      const pendingSomministrazioni = await NotificationHelpers.getTodayPendingSomministrazioni(username, today,);
 
       if (pendingSomministrazioni.length === 0) {
         Logger.info(`Nessun promemoria da programmare per ${username} oggi`, null, 'NotificationService');
@@ -104,9 +104,11 @@ export class NotificationService {
         await NotificationSender.scheduleNotificationAt(
           username,
           medicineName,
-          somm.ore
+          somm.ore,
+          somm.medinaID, // Passa l'ID della somministrazione
+          somm.count
         );
-
+   
         scheduledCount++;
       }
 
