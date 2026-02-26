@@ -23,15 +23,16 @@ export class NotificationHelpers {
   static async getTodayPendingSomministrazioni(
     username: string,
     today: string
-  ): Promise<{ stato: boolean; ore: string; medicineName: string }[]> {
+  ): Promise<{ stato: boolean; ore: string; medicineName: string,  medinaID : number, count : number}[]> {
     try {
-      const result: { stato: boolean; ore: string; medicineName: string }[] = [];
+      const result: { stato: boolean; ore: string; medicineName: string , medinaID : number, count : number}[] = [];
 
       const now = new Date();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
       const medicineRef = collection(db, 'Pazienti', username, 'Medicine_paziente');
       const medicineSnap = await getDocs(medicineRef);
+      
 
       for (const medicineDoc of medicineSnap.docs) {
         const medicineName = medicineDoc.id;
@@ -64,9 +65,19 @@ export class NotificationHelpers {
             result.push({
               stato: sommData.stato,
               ore: sommData.ore,
-              medicineName
+              medicineName,
+              medinaID: parseInt(sommDoc.id), // Estrae un ID numerico dal nome della medicina
+              count : somministrazioniSnap.size
             });
+            console.log(' result pushato ', {
+              stato: sommData.stato,
+              ore: sommData.ore,
+              medicineName,
+              medinaID:  sommDoc.id , // prende l'id della somministrazione
+              count : somministrazioniSnap.size
+             });
           }
+          
         });
       }
 
