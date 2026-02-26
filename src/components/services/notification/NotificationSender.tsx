@@ -51,10 +51,16 @@ export class NotificationSender {
     }
   }
 
-  static async scheduleNotificationAt(username: string, medicineName: string, time: string): Promise<void> {
+  static async scheduleNotificationAt(username: string, medicineName: string, time: string, id : number , count : number): Promise<void> {
     try {
       const [hours, minutes] = time.split(':').map(Number);
       if (isNaN(hours) || isNaN(minutes)) return;
+
+      let mess = ' ';
+      console.log(`Controllo se è l'ultima medicina da prendere oggi per ${medicineName} (ID: ${id}, Count: ${count})`);
+      if(id === count-1 ) {
+        mess = `Questa è l'ultima assunzione del farmaco ${medicineName}, contatta il medico per eventuali nuove prescrizioni`;
+      }
 
       const now = new Date();
       const scheduled = new Date();
@@ -70,7 +76,7 @@ export class NotificationSender {
             oneSignalExternalId: userData.oneSignalExternalId,
             subscriptionId: userData.onesignalIdSubscription,
             title: 'Promemoria medicina',
-            message: `Devi prendere ${medicineName} delle ${time}`,
+            message: `Devi prendere ${medicineName} delle ${time} ${mess}`,
             data: { type: 'medicine_reminder', medicineName, time }
           });
         }
@@ -90,7 +96,7 @@ export class NotificationSender {
             oneSignalExternalId: userData.oneSignalExternalId,
             subscriptionId: userData.onesignalIdSubscription,
             title: 'È ora di prendere la medicina!',
-            message: `È ora di prendere ${medicineName} alle ${time}`,
+            message: `È ora di prendere ${medicineName} alle ${time} ${mess}`,
             data: { type: 'medicine_reminder', medicineName, time }
           });
 
