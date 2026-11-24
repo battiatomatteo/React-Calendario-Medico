@@ -112,9 +112,9 @@ npm run dev
 npm run server
 ```
 
-In caso di problemi con le librerie con package.json , consultare il file package_json.txt .
-
 Il frontend e il server backend vengono avviati separatamente. Il server utilizza la porta 3001, salvo diversa configurazione.
+
+> In caso di problemi con le librerie con package.json , consultare il file package_json.txt .
 
 ## Limitazioni e sviluppi futuri
 
