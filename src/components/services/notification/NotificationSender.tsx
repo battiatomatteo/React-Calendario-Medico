@@ -111,5 +111,3 @@ export class NotificationSender {
 }
 
 export default NotificationSender;
-
-//os_v2_app_fgbn3gdgofceleyweuwuwnlemkzjuwas5bkuvlfeituwzahli2ggj42cyrnkofj4hjnfh4xand5mcm4ziqkcqrstbfjntagyqmnzlva
